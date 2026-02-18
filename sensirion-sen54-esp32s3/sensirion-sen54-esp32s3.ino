@@ -84,7 +84,7 @@ void setup() {
         delay(100);
     }
 
-    Wire.begin(5,6);
+    Wire.begin(6,7);
 
     sen5x.begin(Wire);
 
@@ -136,10 +136,22 @@ void setup() {
     // Start Measurement
     error = sen5x.startMeasurement();
     if (error) {
-        Serial.print("Error trying to execute startMeasurement(): ");
+        Serial.println("Error starting measurement");
         errorToString(error, errorMessage, 256);
         Serial.println(errorMessage);
     }
+    bool dataReady = false;
+    while(!dataReady) {
+        error = sen5x.readDataReady(dataReady);
+        if (error) {
+            Serial.print("Error trying to execute startMeasurement(): ");
+            errorToString(error, errorMessage, 256);
+            Serial.println(errorMessage);
+            break;
+        }
+    }
+    Serial.println("Data ready!!");
+
 }
 
 void loop() {
